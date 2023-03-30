@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package pb;
+
+import "validate/validate.proto";
+
+option go_package = "goligoli/service/user/proto/pb;pb";
+
+service UserService {
+    rpc Login(LoginReq) returns (LoginResp);
+    rpc Register(RegisterReq) returns (RegisterResp);
+    rpc GetInfo(GetInfoReq) returns (GetInfoResp);
+}
+
+message User{
+    int64 id = 1;
+    string name = 2;
+    string email = 3;
+    string photo_url = 4;
+    string description = 5;
+}
+
+message LoginReq {
+    string email = 1; // @gotags: json:"email" form:"email" binding:"required"
+    string password = 2; // @gotags: json:"password" form:"password" binding:"required"
+}
+
+message LoginResp {
+    string token = 1;
+    User user = 2;
+}
+
+message RegisterReq {
+    // @gotags: json:"name" form:"name" binding:"required"
+    string name = 1 [(validate.rules).string = {
+        pattern: "^[a-zA-Z]\\w+{2, 14}$"
+    }];
+    // @gotags: json:"email" form:"email" binding:"required"
+    string email = 2 [(validate.rules).string = {
+        pattern: "^\\w+@\\w+\\.\\w+$"
+        max_bytes: 256
+    }];
+    // @gotags: json:"password" form:"password" binding:"required"
+    string password = 3 [(validate.rules).string = {
+        max_bytes: 256
+        min_bytes: 8
+    }];
+}
+
+message RegisterResp {
+    string token = 1;
+    User user = 2;
+}
+
+message GetInfoReq {
+    int64 id = 1;
+}
+
+message GetInfoResp {
+    User user = 1;
+}

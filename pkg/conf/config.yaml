@@ -1,0 +1,19 @@
+Etcd:
+  URL: http://127.0.0.1:2379
+
+UserService:
+  Name: user-service
+  AppID: goli-user
+  AppKey: Wishrem
+  RpcPort: 8001
+  MySQL:
+    Dsn: "root:root@tcp(127.0.0.1:3306)/goligoli?charset=utf8mb4&parseTime=True&loc=Local"
+
+JWT:
+  Secret: Ko0PGQf95AB41UPU
+  Issuer: Goli
+  Exp: 6h
+  SigningMethod: HS256
+
+GateWay:
+  Port: 8080
