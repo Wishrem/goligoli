@@ -65,9 +65,6 @@ func (us *UserServer) Register(ctx context.Context, req *pb.RegisterReq) (*pb.Re
 		Password: getSHA256String(req.Password),
 	}
 	if err := u.Create(ctx); err != nil {
-		if errors.Is(err, gorm.ErrDuplicatedKey) {
-			return nil, status.Error(codes.AlreadyExists, e.USER_HAS_EXISTED)
-		}
 		return nil, status.Error(codes.Internal, e.INTERNAL)
 	}
 
