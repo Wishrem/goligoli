@@ -2,12 +2,15 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/wishrem/goligoli/api-gateway/service"
+	"github.com/wishrem/goligoli/pkg/conf"
 	"github.com/wishrem/goligoli/pkg/e"
 	"github.com/wishrem/goligoli/pkg/util/jwt"
 	user "github.com/wishrem/goligoli/user/proto/pb"
@@ -162,4 +165,23 @@ func ModifyUserInfo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, resp)
+}
+
+func ViewPhoto(c *gin.Context) {
+	file := new(File)
+	if err := c.ShouldBindUri(&file); err != nil {
+		SendBadRequest(c)
+		return
+	}
+
+	filename := conf.App.Res.PhotoDir + file.FileName
+	f, err := os.Open(filename)
+	if err != nil {
+		fmt.Println(err)
+		c.Redirect(http.StatusFound, "/goligoli/404")
+		return
+	}
+	f.Close()
+
+	c.File(filename)
 }

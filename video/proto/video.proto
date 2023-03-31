@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "proto/pb;pb";
+
+service VideoService {
+    rpc Upload(UploadReq) returns(UploadResp);
+    rpc Like(LikeReq) returns(LikeResp);
+    rpc Share(ShareReq) returns(ShareResp);
+    rpc Judge(JudgeReq) returns(JudgeResp);
+    rpc View(ViewReq) returns(ViewResp);
+}
+
+message Video {
+    int64 user_id = 1;
+    string title = 2;
+    string description = 3;
+    int64 liked = 4;
+    int64 shared = 5;
+    int64 video_id = 6;
+    string video_url = 7;
+    bool passed = 8;
+    string reason = 9;
+}
+
+message UploadReq {
+    int64 user_id = 1;
+    bytes video = 2;
+    string title = 3; // @gotags: json:"title" form:"title" binding:"required"
+    string description = 4; // @gotags: json:"description" form:"description" binding:"required"
+}
+
+message UploadResp {
+    Video video = 1;
+}
+
+message LikeReq {
+    int64 user_id = 1;
+    int64 video_id = 2; // @gotags: json:"video_id" form:"video_id" binding:"required"
+}
+
+message LikeResp {
+}
+
+message ShareReq {
+    int64 user_id = 1;
+    int64 video_id = 2; // @gotags: json:"video_id" form:"video_id" binding:"required"
+}
+
+message ShareResp {
+    string share_url = 1;
+}
+
+message JudgeReq {
+    int64 admin_id = 1;
+    int64 video_id = 2; // @gotags: json:"video_id" form:"video_id" binding:"required"
+    bool passed = 3; // @gotags: json:"passed" form:"passed" binding:"required"
+    string reason = 4; // @gotags: json:"reason" form:"reason"
+}
+
+message JudgeResp {
+    Video video = 1;
+}
+
+message ViewReq {
+    string filename = 1;
+}
+
+message ViewResp {
+}

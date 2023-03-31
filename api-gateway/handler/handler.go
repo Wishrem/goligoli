@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/wishrem/goligoli/erp"
+	"github.com/wishrem/goligoli/pkg/util/jwt"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/status"
 )
@@ -40,8 +40,35 @@ func SendError(c *gin.Context, err error) {
 	}
 }
 
+/*
+**********************
+
+	New version
+
+**********************
+*/
+
 func SendBadRequest(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"error": "Params Loss",
-	})
+	c.JSON(erp.BadRequest.HttpCode(), erp.BadRequest)
+}
+
+func SendErrResp(c *gin.Context, err error) {
+	erp := erp.Covert(err)
+	c.JSON(erp.HttpCode(), erp)
+}
+
+func ParseToken(c *gin.Context) *jwt.Claims {
+	token := new(Token)
+	if err := c.ShouldBind(&token); err != nil {
+		SendErrResp(c, erp.BadRequest)
+		return nil
+	}
+
+	claims, err := jwt.Parse(token.SS)
+	if err != nil {
+		SendErrResp(c, erp.Unauthorized)
+		return nil
+	}
+
+	return claims
 }

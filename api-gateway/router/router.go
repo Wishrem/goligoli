@@ -17,7 +17,14 @@ func Setup() {
 		_goligoli.POST("/user/register", handler.RegisterUser)
 		_goligoli.POST("/user/ban", handler.BanUser)
 
-		_goligoli.GET("/view/:type/:name", handler.View)
+		//video
+		_goligoli.POST("/video", handler.UploadVideo)
+		_goligoli.PUT("/video/status", handler.Judge)
+		_goligoli.GET("/video/link", handler.ShareVideo)
+		_goligoli.PUT("/video", handler.LikeVideo)
+
+		_goligoli.GET("/view/video/:name", handler.ViewVideo)
+		_goligoli.GET("/view/photo/:name", handler.ViewPhoto)
 	}
 
 	r.Run(":" + conf.App.Gateway.Port)

@@ -9,6 +9,14 @@ UserService:
   MySQL:
     Dsn: "root:root@tcp(127.0.0.1:3306)/goligoli?charset=utf8mb4&parseTime=True&loc=Local"
 
+VideoService:
+  Name: video-service
+  AppID: goli-video
+  AppKey: Wishrem
+  RpcPort: 8002
+  MySQL:
+    Dsn: "root:root@tcp(127.0.0.1:3306)/goligoli?charset=utf8mb4&parseTime=True&loc=Local"
+
 JWT:
   Secret: Ko0PGQf95AB41UPU
   Issuer: Goli
