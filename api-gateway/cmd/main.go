@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/wishrem/goligoli/api-gateway/internal/service"
 	"github.com/wishrem/goligoli/api-gateway/router"
+	"github.com/wishrem/goligoli/api-gateway/service"
 )
 
 func main() {

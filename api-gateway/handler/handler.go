@@ -42,6 +42,6 @@ func SendError(c *gin.Context, err error) {
 
 func SendBadRequest(c *gin.Context) {
 	c.JSON(http.StatusBadRequest, gin.H{
-		"error": "Loss Some Params",
+		"error": "Params Loss",
 	})
 }

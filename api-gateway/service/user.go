@@ -52,3 +52,13 @@ func (uc *userClient) GetInfo(req *user.GetInfoReq) (*user.GetInfoResp, error) {
 	c := user.NewUserServiceClient(uc.conn)
 	return c.GetInfo(context.Background(), req)
 }
+
+func (uc *userClient) ModifyInfo(req *user.ModifyInfoReq) (*user.ModifyInfoResp, error) {
+	c := user.NewUserServiceClient(uc.conn)
+	return c.ModifyInfo(context.Background(), req)
+}
+
+func (uc *userClient) Ban(req *user.BanReq) (*user.BanResp, error) {
+	c := user.NewUserServiceClient(uc.conn)
+	return c.Ban(context.Background(), req)
+}

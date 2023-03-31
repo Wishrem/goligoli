@@ -24,6 +24,7 @@ type goligoli struct {
 	UserService service
 	Etcd        etcd
 	Gateway     gateway
+	Res         res
 }
 
 type jwt struct {
@@ -51,4 +52,9 @@ type etcd struct {
 
 type gateway struct {
 	Port string
+}
+
+type res struct {
+	VideoDir string
+	PhotoDir string
 }

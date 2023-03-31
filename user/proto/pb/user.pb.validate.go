@@ -35,6 +35,110 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Ban with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *Ban) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Ban with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in BanMultiError, or nil if none found.
+func (m *Ban) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Ban) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Reason
+
+	// no validation rules for BanAt
+
+	// no validation rules for UnbanAt
+
+	if len(errors) > 0 {
+		return BanMultiError(errors)
+	}
+
+	return nil
+}
+
+// BanMultiError is an error wrapping multiple validation errors returned by
+// Ban.ValidateAll() if the designated constraints aren't met.
+type BanMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BanMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BanMultiError) AllErrors() []error { return m }
+
+// BanValidationError is the validation error returned by Ban.Validate if the
+// designated constraints aren't met.
+type BanValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BanValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BanValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BanValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BanValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BanValidationError) ErrorName() string { return "BanValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BanValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBan.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BanValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BanValidationError{}
+
 // Validate checks the field values on User with the rules defined in the proto
 // definition for this message. If any rules are violated, the first error
 // encountered is returned, or nil if there are no violations.
@@ -65,6 +169,35 @@ func (m *User) validate(all bool) error {
 	// no validation rules for PhotoUrl
 
 	// no validation rules for Description
+
+	if all {
+		switch v := interface{}(m.GetBan()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UserValidationError{
+					field:  "Ban",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UserValidationError{
+					field:  "Ban",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetBan()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UserValidationError{
+				field:  "Ban",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return UserMultiError(errors)
@@ -881,3 +1014,498 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetInfoRespValidationError{}
+
+// Validate checks the field values on BanReq with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *BanReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BanReq with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in BanReqMultiError, or nil if none found.
+func (m *BanReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BanReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for AdminId
+
+	// no validation rules for UserId
+
+	if all {
+		switch v := interface{}(m.GetBan()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, BanReqValidationError{
+					field:  "Ban",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, BanReqValidationError{
+					field:  "Ban",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetBan()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return BanReqValidationError{
+				field:  "Ban",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return BanReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// BanReqMultiError is an error wrapping multiple validation errors returned by
+// BanReq.ValidateAll() if the designated constraints aren't met.
+type BanReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BanReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BanReqMultiError) AllErrors() []error { return m }
+
+// BanReqValidationError is the validation error returned by BanReq.Validate if
+// the designated constraints aren't met.
+type BanReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BanReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BanReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BanReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BanReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BanReqValidationError) ErrorName() string { return "BanReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BanReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBanReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BanReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BanReqValidationError{}
+
+// Validate checks the field values on BanResp with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *BanResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BanResp with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in BanRespMultiError, or nil if none found.
+func (m *BanResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BanResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetUser()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, BanRespValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, BanRespValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return BanRespValidationError{
+				field:  "User",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return BanRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// BanRespMultiError is an error wrapping multiple validation errors returned
+// by BanResp.ValidateAll() if the designated constraints aren't met.
+type BanRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BanRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BanRespMultiError) AllErrors() []error { return m }
+
+// BanRespValidationError is the validation error returned by BanResp.Validate
+// if the designated constraints aren't met.
+type BanRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BanRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BanRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BanRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BanRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BanRespValidationError) ErrorName() string { return "BanRespValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BanRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBanResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BanRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BanRespValidationError{}
+
+// Validate checks the field values on ModifyInfoReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModifyInfoReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModifyInfoReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModifyInfoReqMultiError, or
+// nil if none found.
+func (m *ModifyInfoReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModifyInfoReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Description
+
+	// no validation rules for Photo
+
+	// no validation rules for PhotoType
+
+	if len(errors) > 0 {
+		return ModifyInfoReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModifyInfoReqMultiError is an error wrapping multiple validation errors
+// returned by ModifyInfoReq.ValidateAll() if the designated constraints
+// aren't met.
+type ModifyInfoReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModifyInfoReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModifyInfoReqMultiError) AllErrors() []error { return m }
+
+// ModifyInfoReqValidationError is the validation error returned by
+// ModifyInfoReq.Validate if the designated constraints aren't met.
+type ModifyInfoReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModifyInfoReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModifyInfoReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModifyInfoReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModifyInfoReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModifyInfoReqValidationError) ErrorName() string { return "ModifyInfoReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModifyInfoReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModifyInfoReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModifyInfoReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModifyInfoReqValidationError{}
+
+// Validate checks the field values on ModifyInfoResp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModifyInfoResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModifyInfoResp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModifyInfoRespMultiError,
+// or nil if none found.
+func (m *ModifyInfoResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModifyInfoResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetUser()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ModifyInfoRespValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ModifyInfoRespValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ModifyInfoRespValidationError{
+				field:  "User",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ModifyInfoRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModifyInfoRespMultiError is an error wrapping multiple validation errors
+// returned by ModifyInfoResp.ValidateAll() if the designated constraints
+// aren't met.
+type ModifyInfoRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModifyInfoRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModifyInfoRespMultiError) AllErrors() []error { return m }
+
+// ModifyInfoRespValidationError is the validation error returned by
+// ModifyInfoResp.Validate if the designated constraints aren't met.
+type ModifyInfoRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModifyInfoRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModifyInfoRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModifyInfoRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModifyInfoRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModifyInfoRespValidationError) ErrorName() string { return "ModifyInfoRespValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModifyInfoRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModifyInfoResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModifyInfoRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModifyInfoRespValidationError{}

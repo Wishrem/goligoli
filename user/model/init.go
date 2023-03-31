@@ -45,6 +45,7 @@ func Init() {
 	err = _db.Set("gorm:table_options", "charset=utf8mb4").AutoMigrate(
 		&User{},
 		&Role{},
+		&Ban{},
 	)
 	if err != nil {
 		panic(err)

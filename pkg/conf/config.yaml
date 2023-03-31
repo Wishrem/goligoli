@@ -17,3 +17,7 @@ JWT:
 
 GateWay:
   Port: 8080
+
+Res:
+  VideoDir: /Users/wishrem/workspace/w2/goligoli/res/video/
+  PhotoDir: /Users/wishrem/workspace/w2/goligoli/res/photo/

@@ -8,14 +8,19 @@ import (
 	"syscall"
 
 	"github.com/wishrem/goligoli/pkg/conf"
-	"github.com/wishrem/goligoli/user/internal/handler"
-	"github.com/wishrem/goligoli/user/internal/model"
+	"github.com/wishrem/goligoli/pkg/util/snowflake"
+	"github.com/wishrem/goligoli/user/handler"
+	"github.com/wishrem/goligoli/user/model"
 	"github.com/wishrem/goligoli/user/proto/pb"
 	"google.golang.org/grpc"
 )
 
 func init() {
 	model.Init()
+	if err := os.Mkdir(conf.App.Res.PhotoDir, 0666); err != nil && !os.IsExist(err) {
+		panic(err)
+	}
+	snowflake.Init(0)
 }
 
 func main() {
