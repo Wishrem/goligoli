@@ -2,32 +2,28 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/wishrem/goligoli/comment/model"
-	"github.com/wishrem/goligoli/comment/proto/pb"
-	"github.com/wishrem/goligoli/comment/service"
-	"github.com/wishrem/goligoli/logger"
 	"github.com/wishrem/goligoli/pkg/conf"
 	"github.com/wishrem/goligoli/pkg/util/snowflake"
+
+	"github.com/wishrem/goligoli/danmu/model"
+	"github.com/wishrem/goligoli/danmu/proto/pb"
+	"github.com/wishrem/goligoli/danmu/service"
 	"google.golang.org/grpc"
 )
 
-var Log = logger.Log
-
 func init() {
 	model.Init()
-	logger.Setup(logger.Debug, log.Default())
-	snowflake.Init(2)
+	snowflake.Init(3)
 }
 
 func main() {
 
-	addr := fmt.Sprintf("localhost:%s", conf.App.CommentService.RpcPort)
+	addr := fmt.Sprintf("localhost:%s", conf.App.DanmuService.RpcPort)
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP, syscall.SIGQUIT)
@@ -52,7 +48,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(nil))
-	pb.RegisterCommentServiceServer(grpcServer, &service.CommentService{})
+	pb.RegisterDanmuServiceServer(grpcServer, &service.DanmuService{})
 	if err := grpcServer.Serve(lis); err != nil {
 		panic(err)
 	}

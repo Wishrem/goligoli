@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "proto/pb;pb";
+
+service DanmuService {
+    rpc Send(SendReq) returns (SendResp);
+    rpc GetDanmus(GetDanmusReq) returns (GetDanmusResp);
+}
+
+message Danmu {
+    int64 id = 1;
+    int64 user_id = 2;
+    int64 video_id = 3;
+    string content = 4;
+    int64 begin_at = 5;
+}
+
+message SendReq {
+    int64 video_id = 1;
+    int64 user_id = 2;
+    string content = 3; // @gotags: json:"content" form:"content" binding:"required"
+    int64 begin_at = 4; // @gotags: json:"begin_at" form:"begin_at" binding:"required"
+}
+
+message SendResp {
+    Danmu danmu = 1;
+}
+
+message GetDanmusReq {
+    int64 video_id = 1;
+}
+
+message GetDanmusResp {
+    repeated Danmu danmus = 1;
+}

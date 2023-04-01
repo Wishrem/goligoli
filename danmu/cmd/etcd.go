@@ -17,14 +17,14 @@ func etcdRegister(addr string) error {
 		return err
 	}
 
-	em, err := endpoints.NewManager(etcdClient, conf.App.VideoService.Name)
+	em, err := endpoints.NewManager(etcdClient, conf.App.DanmuService.Name)
 	if err != nil {
 		return err
 	}
 
 	lease, _ := etcdClient.Grant(context.TODO(), 10)
 
-	err = em.AddEndpoint(context.TODO(), fmt.Sprintf("%s/%s", conf.App.VideoService.Name, addr), endpoints.Endpoint{Addr: addr}, clientv3.WithLease(lease.ID))
+	err = em.AddEndpoint(context.TODO(), fmt.Sprintf("%s/%s", conf.App.DanmuService.Name, addr), endpoints.Endpoint{Addr: addr}, clientv3.WithLease(lease.ID))
 	if err != nil {
 		return err
 	}
@@ -45,11 +45,11 @@ func etcdRegister(addr string) error {
 
 func etcdUnRegister(addr string) error {
 	if etcdClient != nil {
-		em, err := endpoints.NewManager(etcdClient, conf.App.VideoService.Name)
+		em, err := endpoints.NewManager(etcdClient, conf.App.DanmuService.Name)
 		if err != nil {
 			return err
 		}
-		err = em.DeleteEndpoint(context.TODO(), fmt.Sprintf("%s/%s", conf.App.VideoService.Name, addr))
+		err = em.DeleteEndpoint(context.TODO(), fmt.Sprintf("%s/%s", conf.App.DanmuService.Name, addr))
 		if err != nil {
 			return err
 		}

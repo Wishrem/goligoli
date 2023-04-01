@@ -8,4 +8,5 @@ func Setup() {
 	SetupUserClient()
 	SetupVideoClient()
 	SetupCommentClient()
+	SetupDanmuClient()
 }

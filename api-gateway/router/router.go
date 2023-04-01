@@ -29,7 +29,8 @@ func Setup() {
 		_goligoli.GET("/comment/:comment_id", handler.GetComment)
 
 		// danmu
-		_goligoli.POST("/danmu/:video_id")
+		_goligoli.POST("/danmu/:video_id", handler.SendDanmu)
+		_goligoli.GET("/danmu/:video_id", handler.GetDanmus)
 
 		// view
 		_goligoli.GET("/view/video/:name", handler.ViewVideo)

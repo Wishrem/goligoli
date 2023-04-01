@@ -28,6 +28,7 @@ func CommentVideo(c *gin.Context) {
 		SendBadRequest(c)
 		return
 	}
+	req.UserId = claims.UserID
 	req.VideoId = vid.ID
 
 	resp, err := service.CommentClient.Comment(req)
@@ -59,6 +60,7 @@ func ResponseComment(c *gin.Context) {
 		SendBadRequest(c)
 		return
 	}
+	req.UserId = claims.UserID
 	req.CommentId = cid.ID
 
 	resp, err := service.CommentClient.Response(req)

@@ -24,6 +24,7 @@ type goligoli struct {
 	UserService    service
 	VideoService   service
 	CommentService service
+	DanmuService   service
 	Etcd           etcd
 	Gateway        gateway
 	Res            res

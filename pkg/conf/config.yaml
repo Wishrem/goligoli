@@ -25,6 +25,14 @@ CommentService:
   MySQL:
     Dsn: "root:root@tcp(127.0.0.1:3306)/goligoli?charset=utf8mb4&parseTime=True&loc=Local"  
 
+DanmuService:
+  Name: danmu-service
+  AppID: goli-danmu
+  AppKey: Wishrem
+  RpcPort: 8004
+  MySQL:
+    Dsn: "root:root@tcp(127.0.0.1:3306)/goligoli?charset=utf8mb4&parseTime=True&loc=Local"  
+
 JWT:
   Secret: Ko0PGQf95AB41UPU
   Issuer: Goli
