@@ -30,17 +30,16 @@ func (vs *VideoService) Upload(ctx context.Context, req *pb.UploadReq) (*pb.Uplo
 		return nil, erp.Internal
 	}
 
-	id := idgen.NextId()
 	v := &model.Video{
-		ID:          id,
+		ID:          idgen.NextId(),
+		UserID:      req.UserId,
 		Title:       req.Title,
 		Description: req.Description,
 		Liked:       0,
 		Shared:      0,
 		VideoUrl:    "127.0.0.1:" + conf.App.Gateway.Port + "/goligoli/view/video/" + ss,
-		Status: model.Status{
-			VideoID: id,
-			Passed:  false,
+		Status: &model.Status{
+			Passed: false,
 		},
 	}
 	if err := v.Create(); err != nil {
@@ -61,7 +60,7 @@ func (vs *VideoService) Like(ctx context.Context, req *pb.LikeReq) (*pb.LikeResp
 func (vs *VideoService) Share(ctx context.Context, req *pb.ShareReq) (*pb.ShareResp, error) {
 	ShareID := fmt.Sprintf("%v", req.UserId)
 	v := &model.Video{ID: req.VideoId}
-	if err := v.GetThenShare(); err != nil {
+	if err := v.Share(); err != nil {
 		logger.Log.Debugln(err)
 		return nil, err
 	}
@@ -74,7 +73,7 @@ func (vs *VideoService) Share(ctx context.Context, req *pb.ShareReq) (*pb.ShareR
 func (vs *VideoService) Judge(ctx context.Context, req *pb.JudgeReq) (*pb.JudgeResp, error) {
 	v := &model.Video{
 		ID: req.VideoId,
-		Status: model.Status{
+		Status: &model.Status{
 			Reason: req.Reason,
 			Passed: req.Passed,
 		},
@@ -98,5 +97,5 @@ func (vs *VideoService) View(ctx context.Context, req *pb.ViewReq) (*pb.ViewResp
 	if !v.Status.Passed {
 		return nil, erp.VideoNotFound
 	}
-	return nil, nil
+	return &pb.ViewResp{}, nil
 }

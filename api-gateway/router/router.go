@@ -17,12 +17,21 @@ func Setup() {
 		_goligoli.POST("/user/register", handler.RegisterUser)
 		_goligoli.POST("/user/ban", handler.BanUser)
 
-		//video
+		// video
 		_goligoli.POST("/video", handler.UploadVideo)
 		_goligoli.PUT("/video/status", handler.Judge)
 		_goligoli.GET("/video/link", handler.ShareVideo)
 		_goligoli.PUT("/video", handler.LikeVideo)
 
+		// comment & response
+		_goligoli.POST("/comment/:video_id", handler.CommentVideo)
+		_goligoli.POST("/respond/:comment_id", handler.ResponseComment)
+		_goligoli.GET("/comment/:comment_id", handler.GetComment)
+
+		// danmu
+		_goligoli.POST("/danmu/:video_id")
+
+		// view
 		_goligoli.GET("/view/video/:name", handler.ViewVideo)
 		_goligoli.GET("/view/photo/:name", handler.ViewPhoto)
 	}

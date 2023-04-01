@@ -20,12 +20,13 @@ func init() {
 var App goligoli
 
 type goligoli struct {
-	JWT          jwt
-	UserService  service
-	VideoService service
-	Etcd         etcd
-	Gateway      gateway
-	Res          res
+	JWT            jwt
+	UserService    service
+	VideoService   service
+	CommentService service
+	Etcd           etcd
+	Gateway        gateway
+	Res            res
 }
 
 type jwt struct {

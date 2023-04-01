@@ -14,7 +14,7 @@ import (
 var db *gorm.DB
 
 func Init() {
-	dsn := conf.App.UserService.MySQL.Dsn
+	dsn := conf.App.VideoService.MySQL.Dsn
 	_db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,
 		DefaultStringSize:         256,
@@ -23,7 +23,7 @@ func Init() {
 		DontSupportRenameColumn:   true,
 		SkipInitializeWithVersion: true,
 	}), &gorm.Config{
-		Logger:      logger.Default,
+		Logger:      logger.Default.LogMode(logger.Info),
 		PrepareStmt: true,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,

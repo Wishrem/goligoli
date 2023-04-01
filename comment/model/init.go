@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/wishrem/goligoli/pkg/conf"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,7 +13,7 @@ import (
 var db *gorm.DB
 
 func Init() {
-	dsn := conf.App.UserService.MySQL.Dsn
+	dsn := conf.App.CommentService.MySQL.Dsn
 	_db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,
 		DefaultStringSize:         256,
@@ -43,9 +42,8 @@ func Init() {
 	sqlDB.SetConnMaxLifetime(30 * time.Second)
 
 	err = _db.Set("gorm:table_options", "charset=utf8mb4").AutoMigrate(
-		&User{},
-		&Role{},
-		&Ban{},
+		&Comment{},
+		&Response{},
 	)
 	if err != nil {
 		panic(err)

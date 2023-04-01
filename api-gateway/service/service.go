@@ -7,4 +7,5 @@ var Log = logger.Log
 func Setup() {
 	SetupUserClient()
 	SetupVideoClient()
+	SetupCommentClient()
 }
