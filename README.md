@@ -32,7 +32,7 @@ video # video模块，接收video有关的业务请求（comment等模块于vide
 ## Comment等模块于Video模块雷同
 
 ## 流程图
-![Process]()
+![Process](https://github.com/Wishrem/goligoli/blob/main/img/Process.svg)
 
 ## 数据关系
-![ER]()
+![ER](https://github.com/Wishrem/goligoli/blob/main/img/ER.svg)
