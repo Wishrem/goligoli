@@ -156,3 +156,29 @@ func ViewVideo(c *gin.Context) {
 
 	c.File(fileName)
 }
+
+func GetVideos(c *gin.Context) {
+	req := new(video.GetVideosReq)
+	if err := c.ShouldBind(&req); err != nil {
+		logger.Log.Debugln(err)
+		SendBadRequest(c)
+		return
+	}
+
+	claims := ParseToken(c)
+	if claims == nil {
+		return
+	}
+
+	if !HasVideoSearchingOpt(c, req) {
+		return
+	}
+
+	resp, err := service.VideoClient.GetVideos(req)
+	if err != nil {
+		SendErrResp(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}

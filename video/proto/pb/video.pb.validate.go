@@ -74,6 +74,8 @@ func (m *Video) validate(all bool) error {
 
 	// no validation rules for Reason
 
+	// no validation rules for Year
+
 	if len(errors) > 0 {
 		return VideoMultiError(errors)
 	}
@@ -180,6 +182,8 @@ func (m *UploadReq) validate(all bool) error {
 	// no validation rules for Title
 
 	// no validation rules for Description
+
+	// no validation rules for Year
 
 	if len(errors) > 0 {
 		return UploadReqMultiError(errors)
@@ -1224,3 +1228,244 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ViewRespValidationError{}
+
+// Validate checks the field values on GetVideosReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetVideosReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetVideosReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetVideosReqMultiError, or
+// nil if none found.
+func (m *GetVideosReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetVideosReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Year
+
+	// no validation rules for Liked
+
+	// no validation rules for Shared
+
+	// no validation rules for Title
+
+	if len(errors) > 0 {
+		return GetVideosReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetVideosReqMultiError is an error wrapping multiple validation errors
+// returned by GetVideosReq.ValidateAll() if the designated constraints aren't met.
+type GetVideosReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetVideosReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetVideosReqMultiError) AllErrors() []error { return m }
+
+// GetVideosReqValidationError is the validation error returned by
+// GetVideosReq.Validate if the designated constraints aren't met.
+type GetVideosReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetVideosReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetVideosReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetVideosReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetVideosReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetVideosReqValidationError) ErrorName() string { return "GetVideosReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetVideosReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetVideosReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetVideosReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetVideosReqValidationError{}
+
+// Validate checks the field values on GetVideosResp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetVideosResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetVideosResp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetVideosRespMultiError, or
+// nil if none found.
+func (m *GetVideosResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetVideosResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetVideos() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetVideosRespValidationError{
+						field:  fmt.Sprintf("Videos[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetVideosRespValidationError{
+						field:  fmt.Sprintf("Videos[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetVideosRespValidationError{
+					field:  fmt.Sprintf("Videos[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return GetVideosRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetVideosRespMultiError is an error wrapping multiple validation errors
+// returned by GetVideosResp.ValidateAll() if the designated constraints
+// aren't met.
+type GetVideosRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetVideosRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetVideosRespMultiError) AllErrors() []error { return m }
+
+// GetVideosRespValidationError is the validation error returned by
+// GetVideosResp.Validate if the designated constraints aren't met.
+type GetVideosRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetVideosRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetVideosRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetVideosRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetVideosRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetVideosRespValidationError) ErrorName() string { return "GetVideosRespValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetVideosRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetVideosResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetVideosRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetVideosRespValidationError{}

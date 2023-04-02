@@ -18,3 +18,13 @@ func generatePBVideo(v *model.Video) *pb.Video {
 	video.VideoUrl = v.VideoUrl
 	return video
 }
+
+func parseGetVideosResp(vs *[]model.Video) *pb.GetVideosResp {
+	videos := make([]*pb.Video, 0)
+	for _, v := range *vs {
+		if v.Status != nil && v.Status.Passed {
+			videos = append(videos, generatePBVideo(&v))
+		}
+	}
+	return &pb.GetVideosResp{Videos: videos}
+}

@@ -19,6 +19,7 @@ func Setup() {
 
 		// video
 		_goligoli.POST("/video", handler.UploadVideo)
+		_goligoli.GET("/video", handler.GetVideos)
 		_goligoli.PUT("/video/status", handler.Judge)
 		_goligoli.GET("/video/link", handler.ShareVideo)
 		_goligoli.PUT("/video", handler.LikeVideo)

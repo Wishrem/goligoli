@@ -18,7 +18,7 @@ func New(roleTypes ...string) *Role {
 	return role
 }
 
-func GetRole(roles []model.Role) *Role {
+func GetRole(roles []*model.Role) *Role {
 	role := new(Role)
 	for _, s := range roles {
 		role.roleType = append(role.roleType, s.Type)

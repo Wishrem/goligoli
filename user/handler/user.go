@@ -67,8 +67,9 @@ func (us *UserServer) Register(ctx context.Context, req *pb.RegisterReq) (*pb.Re
 		Email:    req.Email,
 		PhotoUrl: "127.0.0.1:" + conf.App.Gateway.Port + "/goligoli/view/photo/default.jpg",
 		Password: s,
-		Roles: []model.Role{
+		Roles: []*model.Role{
 			{
+				ID:   idgen.NextId(),
 				Type: "user",
 			},
 		},
@@ -108,7 +109,8 @@ func (us *UserServer) Ban(ctx context.Context, req *pb.BanReq) (*pb.BanResp, err
 		ID: req.UserId,
 	}
 
-	u.Ban = model.Ban{
+	u.Ban = &model.Ban{
+		ID:      idgen.NextId(),
 		Reason:  req.Ban.Reason,
 		BanAt:   time.Unix(req.Ban.BanAt, 0),
 		UnbanAt: time.Unix(req.Ban.UnbanAt, 0),

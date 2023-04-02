@@ -22,7 +22,7 @@ func main() {
 func CreateAdmin() error {
 	u := new(model.User)
 	u.ID = idgen.NextId()
-	u.Roles = []model.Role{
+	u.Roles = []*model.Role{
 		{
 			Type: "admin",
 		},

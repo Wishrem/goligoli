@@ -1,4 +1,4 @@
-package main
+package etcd
 
 import (
 	"context"
@@ -11,20 +11,20 @@ import (
 
 var etcdClient *clientv3.Client
 
-func etcdRegister(addr string) error {
+func EtcdRegister(addr string, name string) error {
 	etcdClient, err := clientv3.NewFromURL(conf.App.Etcd.URL)
 	if err != nil {
 		return err
 	}
 
-	em, err := endpoints.NewManager(etcdClient, conf.App.VideoService.Name)
+	em, err := endpoints.NewManager(etcdClient, name)
 	if err != nil {
 		return err
 	}
 
 	lease, _ := etcdClient.Grant(context.TODO(), 10)
 
-	err = em.AddEndpoint(context.TODO(), fmt.Sprintf("%s/%s", conf.App.VideoService.Name, addr), endpoints.Endpoint{Addr: addr}, clientv3.WithLease(lease.ID))
+	err = em.AddEndpoint(context.TODO(), fmt.Sprintf("%s/%s", name, addr), endpoints.Endpoint{Addr: addr}, clientv3.WithLease(lease.ID))
 	if err != nil {
 		return err
 	}
@@ -43,13 +43,13 @@ func etcdRegister(addr string) error {
 	return nil
 }
 
-func etcdUnRegister(addr string) error {
+func EtcdUnRegister(addr string, name string) error {
 	if etcdClient != nil {
-		em, err := endpoints.NewManager(etcdClient, conf.App.VideoService.Name)
+		em, err := endpoints.NewManager(etcdClient, name)
 		if err != nil {
 			return err
 		}
-		err = em.DeleteEndpoint(context.TODO(), fmt.Sprintf("%s/%s", conf.App.VideoService.Name, addr))
+		err = em.DeleteEndpoint(context.TODO(), fmt.Sprintf("%s/%s", name, addr))
 		if err != nil {
 			return err
 		}

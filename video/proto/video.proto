@@ -10,6 +10,7 @@ service VideoService {
     rpc Share(ShareReq) returns(ShareResp);
     rpc Judge(JudgeReq) returns(JudgeResp);
     rpc View(ViewReq) returns(ViewResp);
+    rpc GetVideos(GetVideosReq) returns(GetVideosResp);
 }
 
 message Video {
@@ -22,6 +23,7 @@ message Video {
     string video_url = 7;
     bool passed = 8;
     string reason = 9;
+    int64 year = 10;
 }
 
 message UploadReq {
@@ -29,6 +31,7 @@ message UploadReq {
     bytes video = 2;
     string title = 3; // @gotags: json:"title" form:"title" binding:"required"
     string description = 4; // @gotags: json:"description" form:"description" binding:"required"
+    int64 year = 5;
 }
 
 message UploadResp {
@@ -68,4 +71,15 @@ message ViewReq {
 }
 
 message ViewResp {
+}
+
+message GetVideosReq {
+    int64 year = 1; // @gotags: json:"year" form:"year"
+    int64 liked = 2; // @gotags: json:"liked" form:"liked"
+    int64 shared = 3; // @gotags: json:"shared" form:"shared"
+    string title = 4; // @gotags: json:"title" form:"title"
+}
+
+message GetVideosResp {
+    repeated Video videos = 1;
 }

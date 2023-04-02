@@ -11,7 +11,7 @@ import (
 
 func parseUser(user *model.User) *pb.User {
 	u := new(pb.User)
-	u.Ban = parseBan(&user.Ban)
+	u.Ban = parseBan(user.Ban)
 	u.Roles = parseRole(user.Roles...)
 
 	u.Id = user.ID
@@ -30,7 +30,7 @@ func parseBan(ban *model.Ban) *pb.Ban {
 	return b
 }
 
-func parseRole(role ...model.Role) []string {
+func parseRole(role ...*model.Role) []string {
 	r := make([]string, 0, len(role))
 	for _, s := range role {
 		r = append(r, s.Type)

@@ -3,6 +3,7 @@ package erp
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"google.golang.org/grpc/status"
 )
@@ -20,11 +21,11 @@ func _new(code int64) *ErrResp {
 	return &ErrResp{c: code, m: msg}
 }
 
-func New(code int64, msg string) *ErrResp {
+func New(code int64, format string, a ...any) *ErrResp {
 	if getMessage(code) == "Unknown" {
 		code = INTERNAL_ERROR
 	}
-	return &ErrResp{c: code, m: msg}
+	return &ErrResp{c: code, m: fmt.Sprintf(format, a...)}
 }
 
 func Covert(err error) *ErrResp {

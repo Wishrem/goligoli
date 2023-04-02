@@ -39,6 +39,7 @@ func (vs *VideoService) Upload(ctx context.Context, req *pb.UploadReq) (*pb.Uplo
 		Shared:      0,
 		VideoUrl:    "127.0.0.1:" + conf.App.Gateway.Port + "/goligoli/view/video/" + ss,
 		Status: &model.Status{
+			ID:     idgen.NextId(),
 			Passed: false,
 		},
 	}
@@ -98,4 +99,21 @@ func (vs *VideoService) View(ctx context.Context, req *pb.ViewReq) (*pb.ViewResp
 		return nil, erp.VideoNotFound
 	}
 	return &pb.ViewResp{}, nil
+}
+
+func (vs *VideoService) GetVideos(ctx context.Context, req *pb.GetVideosReq) (*pb.GetVideosResp, error) {
+	s := &model.Search{
+		Year:   req.Year,
+		Shared: req.Shared,
+		Liked:  req.Liked,
+		Title:  req.Title,
+	}
+
+	videos := make([]model.Video, 0)
+	if err := s.SearchVideos(&videos); err != nil {
+		logger.Log.Debugln(err)
+		return nil, erp.Internal
+	}
+
+	return parseGetVideosResp(&videos), nil
 }

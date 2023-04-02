@@ -8,6 +8,7 @@ type Video struct {
 	Liked       int64   `gorm:"not null"`
 	Shared      int64   `gorm:"not null"`
 	VideoUrl    string  `gorm:"not null"`
+	Year        int64   `gorm:"not null"`
 	Status      *Status `gorm:"foreignKey:VideoID;references:ID"`
 }
 
@@ -16,4 +17,11 @@ type Status struct {
 	VideoID int64 `gorm:"not null;unique"`
 	Passed  bool  `gorm:"not null"`
 	Reason  string
+}
+
+type Search struct {
+	Year   int64  `sql:"year > ?"`
+	Liked  int64  `sql:"liked > ?"`
+	Shared int64  `sql:"shared > ?"`
+	Title  string `sql:"title LIKE ?"`
 }

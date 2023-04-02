@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"reflect"
+
 	"github.com/gin-gonic/gin"
 	"github.com/wishrem/goligoli/erp"
+	"github.com/wishrem/goligoli/logger"
 	"github.com/wishrem/goligoli/pkg/util/jwt"
+	video "github.com/wishrem/goligoli/video/proto/pb"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/status"
 )
@@ -71,4 +75,23 @@ func ParseToken(c *gin.Context) *jwt.Claims {
 	}
 
 	return claims
+}
+
+func HasVideoSearchingOpt(c *gin.Context, req *video.GetVideosReq) bool {
+	hasSomething := false
+	reqT := reflect.TypeOf(*req)
+	reqV := reflect.ValueOf(*req)
+	for i := 0; i < reqT.NumField(); i++ {
+		if !reqV.Field(i).IsZero() {
+			hasSomething = true
+			break
+		}
+	}
+
+	if !hasSomething {
+		logger.Log.Debugln("zero video searching option")
+		SendBadRequest(c)
+		return false
+	}
+	return true
 }

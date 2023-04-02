@@ -1,6 +1,10 @@
 package model
 
 import (
+	"reflect"
+	"strings"
+
+	"github.com/wishrem/goligoli/erp"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -33,4 +37,26 @@ func (v *Video) JudgeThenGet() error {
 		return err
 	}
 	return db.Take(&v).Error
+}
+
+func (s *Search) SearchVideos(dst *[]Video) error {
+	sql := make([]string, 0)
+	params := make([]interface{}, 0)
+	sT := reflect.TypeOf(*s)
+	sV := reflect.ValueOf(*s)
+	for i := 0; i < sT.NumField(); i++ {
+		if tag := sT.Field(i).Tag.Get("sql"); tag != "" && !sV.Field(i).IsZero() {
+			sql = append(sql, tag)
+			v := sV.Field(i)
+			if !v.CanInterface() {
+				return erp.New(erp.INTERNAL_ERROR, "the filed of 'Search': %v can't be used as 'Interface'", v)
+			}
+			params = append(params, v.Interface())
+		}
+	}
+	if len(sql) == 0 {
+		return erp.New(erp.INTERNAL_ERROR, "video searching option is empty")
+	}
+
+	return db.Model(&Video{}).Preload(clause.Associations).Where(strings.Join(sql, " and "), params...).Find(dst).Error
 }

@@ -10,6 +10,7 @@ import (
 
 	"github.com/wishrem/goligoli/logger"
 	"github.com/wishrem/goligoli/pkg/conf"
+	"github.com/wishrem/goligoli/pkg/etcd"
 	"github.com/wishrem/goligoli/pkg/util/snowflake"
 	"github.com/wishrem/goligoli/video/model"
 	"github.com/wishrem/goligoli/video/proto/pb"
@@ -29,14 +30,14 @@ func init() {
 }
 
 func main() {
-
+	name := conf.App.VideoService.Name
 	addr := fmt.Sprintf("localhost:%s", conf.App.VideoService.RpcPort)
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP, syscall.SIGQUIT)
 	go func() {
 		s := <-ch
-		etcdUnRegister(addr)
+		etcd.EtcdUnRegister(addr, name)
 		if i, ok := s.(syscall.Signal); ok {
 			os.Exit(int(i))
 		} else {
@@ -44,7 +45,7 @@ func main() {
 		}
 	}()
 
-	err := etcdRegister(addr)
+	err := etcd.EtcdRegister(addr, name)
 	if err != nil {
 		panic(err)
 	}

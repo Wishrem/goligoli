@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"time"
 
+	"github.com/wishrem/goligoli/erp"
 	"github.com/wishrem/goligoli/pkg/conf"
 	video "github.com/wishrem/goligoli/video/proto/pb"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -57,6 +59,8 @@ func (vc *videoClient) Upload(req *video.UploadReq, file *multipart.FileHeader) 
 	}
 	req.Video = bytes
 
+	req.Year = int64(time.Now().Year())
+
 	return v.Upload(context.Background(), req)
 }
 
@@ -78,4 +82,14 @@ func (vc *videoClient) View(req *video.ViewReq) (*video.ViewResp, error) {
 func (vc *videoClient) Judge(req *video.JudgeReq) (*video.JudgeResp, error) {
 	v := video.NewVideoServiceClient(vc.conn)
 	return v.Judge(context.Background(), req)
+}
+
+func (vc *videoClient) GetVideos(req *video.GetVideosReq) (*video.GetVideosResp, error) {
+	v := video.NewVideoServiceClient(vc.conn)
+
+	if req.Year < 1978 || req.Year > int64(time.Now().Year()) {
+		return nil, erp.BadRequest
+	}
+
+	return v.GetVideos(context.Background(), req)
 }
