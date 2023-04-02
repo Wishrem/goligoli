@@ -17,5 +17,8 @@
 # build
 build/
 
+# apple
+.DS_Store
+
 # res
 res
