@@ -21,10 +21,14 @@ func (u *User) Create(ctx context.Context) error {
 }
 
 func (u *User) UpdateBan(ctx context.Context) error {
-	if u.ID != 0 {
-		return db.Model(&User{}).Preload("Ban").Select("ban").Where("id = ?", u.ID).Updates(&u.Ban).Error
+	if u.ID == 0 {
+		return errors.New("no index to find")
 	}
-	return errors.New("no index to find")
+	if err := db.Model(&Ban{}).Where("user_id = ?", u.ID).Updates(u.Ban).Error; err != nil {
+		return err
+	}
+
+	return db.Model(u).Preload(clause.Associations).Take(u).Error
 }
 
 func (u *User) UpdateInfo(ctx context.Context) error {

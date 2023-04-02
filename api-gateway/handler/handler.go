@@ -64,6 +64,7 @@ func SendErrResp(c *gin.Context, err error) {
 func ParseToken(c *gin.Context) *jwt.Claims {
 	token := new(Token)
 	if err := c.ShouldBind(&token); err != nil {
+		logger.Log.Debugln(err)
 		SendErrResp(c, erp.BadRequest)
 		return nil
 	}
@@ -84,7 +85,7 @@ func HasVideoSearchingOpt(c *gin.Context, req *video.GetVideosReq) bool {
 	for i := 0; i < reqT.NumField(); i++ {
 		if !reqV.Field(i).IsZero() {
 			hasSomething = true
-			break
+			return true
 		}
 	}
 

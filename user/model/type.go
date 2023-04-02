@@ -24,7 +24,7 @@ type (
 
 	Role struct {
 		ID     int64  `gorm:"primaryKey;unique;not null"`
-		UserID int64  `gorm:"unique;not null"`
+		UserID int64  `gorm:"not null"`
 		Type   string `gorm:"not null"`
 	}
 )

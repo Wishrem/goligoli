@@ -40,7 +40,6 @@ func Parse(tokenString string) (*Claims, error) {
 	}
 
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		fmt.Println(claims)
 		return claims, nil
 	} else {
 		return nil, status.Error(codes.PermissionDenied, e.UNAUTHENTICATED)

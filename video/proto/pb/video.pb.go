@@ -148,7 +148,7 @@ type UploadReq struct {
 	Video       []byte `protobuf:"bytes,2,opt,name=video,proto3" json:"video,omitempty"`
 	Title       string `protobuf:"bytes,3,opt,name=title,proto3" json:"title" form:"title" binding:"required"`             // @gotags: json:"title" form:"title" binding:"required"
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description" form:"description" binding:"required"` // @gotags: json:"description" form:"description" binding:"required"
-	Year        int64  `protobuf:"varint,5,opt,name=year,proto3" json:"year,omitempty"`
+	Year        int64  `protobuf:"varint,5,opt,name=year,proto3" json:"year" form:"year" binding:"required"`              // @gotags: json:"year" form:"year" binding:"required"
 }
 
 func (x *UploadReq) Reset() {

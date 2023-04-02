@@ -20,8 +20,8 @@ type Status struct {
 }
 
 type Search struct {
-	Year   int64  `sql:"year > ?"`
-	Liked  int64  `sql:"liked > ?"`
-	Shared int64  `sql:"shared > ?"`
+	Year   int64  `sql:"year >= ?"`
+	Liked  int64  `sql:"liked >= ?"`
+	Shared int64  `sql:"shared >= ?"`
 	Title  string `sql:"title LIKE ?"`
 }

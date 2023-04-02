@@ -7,7 +7,6 @@ import (
 	"mime/multipart"
 	"time"
 
-	"github.com/wishrem/goligoli/erp"
 	"github.com/wishrem/goligoli/pkg/conf"
 	video "github.com/wishrem/goligoli/video/proto/pb"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -86,10 +85,8 @@ func (vc *videoClient) Judge(req *video.JudgeReq) (*video.JudgeResp, error) {
 
 func (vc *videoClient) GetVideos(req *video.GetVideosReq) (*video.GetVideosResp, error) {
 	v := video.NewVideoServiceClient(vc.conn)
-
-	if req.Year < 1978 || req.Year > int64(time.Now().Year()) {
-		return nil, erp.BadRequest
+	if len(req.Title) != 0 {
+		req.Title = fmt.Sprintf("%%%s%%", req.Title)
 	}
-
 	return v.GetVideos(context.Background(), req)
 }

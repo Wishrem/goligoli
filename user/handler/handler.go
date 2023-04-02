@@ -23,6 +23,9 @@ func parseUser(user *model.User) *pb.User {
 }
 
 func parseBan(ban *model.Ban) *pb.Ban {
+	if ban == nil {
+		return nil
+	}
 	b := new(pb.Ban)
 	b.BanAt = ban.BanAt.Unix()
 	b.Reason = ban.Reason

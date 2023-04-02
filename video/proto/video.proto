@@ -31,7 +31,7 @@ message UploadReq {
     bytes video = 2;
     string title = 3; // @gotags: json:"title" form:"title" binding:"required"
     string description = 4; // @gotags: json:"description" form:"description" binding:"required"
-    int64 year = 5;
+    int64 year = 5; // @gotags: json:"year" form:"year" binding:"required"
 }
 
 message UploadResp {

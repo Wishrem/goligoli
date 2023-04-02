@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -161,6 +162,7 @@ func GetVideos(c *gin.Context) {
 	req := new(video.GetVideosReq)
 	if err := c.ShouldBind(&req); err != nil {
 		logger.Log.Debugln(err)
+		fmt.Println(err)
 		SendBadRequest(c)
 		return
 	}

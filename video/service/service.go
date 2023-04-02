@@ -55,7 +55,7 @@ func (vs *VideoService) Upload(ctx context.Context, req *pb.UploadReq) (*pb.Uplo
 
 func (vs *VideoService) Like(ctx context.Context, req *pb.LikeReq) (*pb.LikeResp, error) {
 	v := &model.Video{ID: req.VideoId}
-	return nil, v.Like()
+	return &pb.LikeResp{}, v.Like()
 }
 
 func (vs *VideoService) Share(ctx context.Context, req *pb.ShareReq) (*pb.ShareResp, error) {

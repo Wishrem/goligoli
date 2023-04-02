@@ -73,6 +73,12 @@ func (us *UserServer) Register(ctx context.Context, req *pb.RegisterReq) (*pb.Re
 				Type: "user",
 			},
 		},
+		Ban: &model.Ban{
+			ID:      idgen.NextId(),
+			Reason:  "",
+			BanAt:   time.Unix(0, 0),
+			UnbanAt: time.Unix(0, 0),
+		},
 	}
 	if err := u.Create(ctx); err != nil {
 		return nil, status.Error(codes.Internal, e.INTERNAL)
